@@ -7,7 +7,12 @@ import User from "./User.js";
 export default function SearchHeader() {
   const router = useRouter();
   const searchInputRef = useRef(null);
-
+  function search(e) {
+    e.preventDefault();
+    const term = searchInputRef.current.value;
+    if (!term.trim()) return;
+    router.push(`search?term=${term.trim()}`);
+  }
   return (
     <header className="sticky top-0 bg-white">
       <div className="flex w-full p-6 items-center">
@@ -25,12 +30,17 @@ export default function SearchHeader() {
             type="text"
             defaultValue={router.query.term}
             ref={searchInputRef}
+            className="w-full focus:outline-none"
           />
-          <XIcon className="h-7" />
-          <MicrophoneIcon className="h-6" />
-          <SearchIcon className="h-6" />
+          <XIcon
+            className="h-7 text-gray-500 cursor-poiner sm:mr-3"
+            onClick={() => (searchInputRef.current.value = "")}
+          />
+          <MicrophoneIcon className="h-6 hidden sm:inline-flex text-blue-500 pl-4 border-l-2 border-gray-300 mr-3" />
+          <SearchIcon className="h-6 hidden sm:inline-flex text-blue-500" />
+          <button onClick={search} type="submit" hidden />
         </form>
-        <User className="ml-auto" />
+        <User className="ml-auto whitespace-nowrap" />
       </div>
     </header>
   );
